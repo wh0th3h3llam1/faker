@@ -20,6 +20,7 @@ from faker.providers.person.et_EE import Provider as EtEEProvider
 from faker.providers.person.fi_FI import Provider as FiProvider
 from faker.providers.person.fr_BE import Provider as FrBEProvider
 from faker.providers.person.ga_IE import Provider as GaIEProvider
+from faker.providers.person.gj_IN import Provider as GjINProvider
 from faker.providers.person.he_IL import Provider as HeILProvider
 from faker.providers.person.hy_AM import Provider as HyAmProvider
 from faker.providers.person.lv_LV import Provider as LvProvider
@@ -671,6 +672,29 @@ class TestGaIE(TestEnIE):
         self.fake = Faker("ga-ie")
         self.provider = GaIEProvider
         Faker.seed(0)
+
+
+class TestGjIN(unittest.TestCase):
+
+    def setUp(self):
+        self.fake = Faker("gj_IN")
+        Faker.seed(0)
+
+    def test_first_name(self):
+        """Verify that gender specific names are set correctly"""
+
+        name = self.fake.first_name_male()
+        assert name in GjINProvider.first_names_male
+
+        name = self.fake.first_name_female()
+        assert name in GjINProvider.first_names_female
+
+        name = self.fake.first_name()
+        assert name in GjINProvider.first_names
+
+    def test_last_name(self):
+        last_name = self.fake.last_name()
+        assert last_name in GjINProvider.last_names
 
 
 class TestHeIL(unittest.TestCase):

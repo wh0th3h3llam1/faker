@@ -26,6 +26,7 @@ from faker.providers.date_time.de_DE import Provider as DeDeProvider
 from faker.providers.date_time.el_GR import Provider as ElGrProvider
 from faker.providers.date_time.es_ES import Provider as EsEsProvider
 from faker.providers.date_time.fr_FR import Provider as FrFrProvider
+from faker.providers.date_time.gj_IN import Provider as GjINProvider
 from faker.providers.date_time.hy_AM import Provider as HyAmProvider
 from faker.providers.date_time.it_IT import Provider as ItItProvider
 from faker.providers.date_time.ja_JP import Provider as JaJpProvider
@@ -1336,3 +1337,29 @@ class TestViVn(unittest.TestCase):
         month = self.fake.month_name()
         assert isinstance(month, str)
         assert month in ViVNProvider.MONTH_NAMES.values()
+
+
+class TestGjIN(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self.fake = Faker("gj_IN")
+        Faker.seed(0)
+
+    def test_day(self):
+        day = self.fake.day_of_week()
+        assert day in GjINProvider.DAY_NAMES.values()
+
+    def test_month(self):
+        month = self.fake.month_name()
+        assert month in GjINProvider.MONTH_NAMES.values()
+
+    def test_day_in_guj(self):
+        day = self.fake.day_of_week_in_guj()
+        assert day in GjINProvider.DAY_NAMES_IN_GUJARATI.values()
+
+    def test_month_in_guj(self):
+        month = self.fake.month_name_in_guj()
+        assert month in GjINProvider.MONTH_NAMES_IN_GUJARATI.values()
+
+        month = self.fake.month_in_guj()
+        assert month in GjINProvider.MONTH_NAMES_IN_GUJARATI.values()

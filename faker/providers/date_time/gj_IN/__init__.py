@@ -70,3 +70,7 @@ class Provider(DateTimeProvider):
         """Returns month name in `Gujarati`"""
         month = self.month()
         return self.MONTH_NAMES_IN_GUJARATI[month]
+
+    def month_in_guj(self):
+        """Returns month name in `Gujarati`"""
+        return self.month_name()
