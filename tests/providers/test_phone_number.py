@@ -3,6 +3,8 @@ import re
 from typing import Pattern
 
 from faker.providers.phone_number import Provider as PhoneNumberProvider
+from faker.providers.phone_number.de_AT import Provider as DeAtPhoneNumberProvider
+from faker.providers.phone_number.de_CH import Provider as DeChPhoneNumberProvider
 from faker.providers.phone_number.en_PH import Provider as EnPhPhoneNumberProvider
 
 
@@ -97,6 +99,26 @@ class TestAzAz:
             assert self.landline_patterns.fullmatch(landline_number)
 
 
+class TestFrCh:
+    def test_phone_number(self, faker, num_samples):
+        pattern: Pattern = re.compile(
+            r"((0041|\+41) ?)?((\(0\)|0)?\d{2})? ?[0-9]{3} ?[0-9]{2} ?[0-9]{2}|" r"0[89][0-9]{2} ?[0-9]{3} ?[0-9]{3}"
+        )
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert pattern.fullmatch(phone_number)
+
+
+class TestItCh:
+    def test_phone_number(self, faker, num_samples):
+        pattern: Pattern = re.compile(
+            r"((0041|\+41) ?)?((\(0\)|0)?\d{2})? ?[0-9]{3} ?[0-9]{2} ?[0-9]{2}|" r"0[89][0-9]{2} ?[0-9]{3} ?[0-9]{3}"
+        )
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert pattern.fullmatch(phone_number)
+
+
 class TestCsCz:
     """Test cs_CZ phone number provider methods"""
 
@@ -105,6 +127,45 @@ class TestCsCz:
         for _ in range(num_samples):
             phone_number = faker.phone_number()
             assert pattern.fullmatch(phone_number)
+
+
+class TestDeAt:
+    """Test de_AT phone number provider methods"""
+
+    landline_pattern: Pattern = re.compile(r"(\+43( \(0\))?|\(?0)\s?(?P<area_code>[0-9]{1,4})\)?\s?\/?[0-9 ]+")
+    cellphone_pattern: Pattern = re.compile(r"(\+43( \(0\))?|0)\s?(?P<dialing_code>[0-9]{3})\s?\/?[0-9 ]+")
+
+    def test_phone_number(self, faker, num_samples):
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert self.landline_pattern.fullmatch(phone_number)
+
+    def test_cellphone_number(self, faker, num_samples):
+        for _ in range(num_samples):
+            cellphone_number = faker.cellphone_number()
+            assert self.cellphone_pattern.fullmatch(cellphone_number)
+            assert (
+                self.cellphone_pattern.match(cellphone_number).group("dialing_code")
+                in DeAtPhoneNumberProvider.dialing_codes
+            )
+
+
+class TestDeCh:
+    """Test de_CH phone number provider methods"""
+
+    pattern: Pattern = re.compile(r"(\+41|0) ?(?P<dialing_code>\d{2}) \d{3} \d{2} \d{2}")
+
+    def test_phone_number(self, faker, num_samples):
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert self.pattern.fullmatch(phone_number)
+            assert self.pattern.match(phone_number).group("dialing_code") in DeChPhoneNumberProvider.landline_codes
+
+    def test_cellphone_number(self, faker, num_samples):
+        for _ in range(num_samples):
+            cellphone_number = faker.cellphone_number()
+            assert self.pattern.fullmatch(cellphone_number)
+            assert self.pattern.match(cellphone_number).group("dialing_code") in DeChPhoneNumberProvider.dialing_codes
 
 
 class TestEnPh:
@@ -456,6 +517,29 @@ class TestViVn:
             r"\+84-\d{2}-\d{6}|"  # Example: +84-12-345678
             r"\+84-\d{2}-\d{3} \d{4}|"  # Example: +84-12-345 6789
             r"\(0\d\)\d{3}-\d{4}"  # Example: (012)345-6789
+            r")"  # Closing non-capturing group
+        )
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert isinstance(phone_number, str)
+            assert pattern.fullmatch(phone_number)
+
+
+class TestUzUz:
+    """Test uz_UZ phone number provider methods"""
+
+    def test_phone_number(self, faker, num_samples):
+        pattern: Pattern = re.compile(
+            r"(?:"  # Non-capturing group
+            r"\+998 \(\d{2}\) \d{3}-\d{2}-\d{2}|"  # Example: +998 (93) 123-45-67
+            r"\+998 \(\d{2}\) \d{3} \d{2} \d{2}|"  # Example: +998 (93) 123 45 67
+            r"\+998 \(\d{2}\) \d{3} \d{4}|"  # Example: +998 (93) 123 4567
+            r"\+998 \(\d{2}\) \d{3}-\d{4}|"  # Example: +998 (93) 123-4567
+            r"\+998 \d{2} \d{3}-\d{2}-\d{2}|"  # Example: +998 93 123-45-67
+            r"\+998 \d{2} \d{3} \d{2} \d{2}|"  # Example: +998 93 123 45 67
+            r"\+998 \d{2} \d{3} \d{4}|"  # Example: +998 93 123 4567
+            r"\+998 \d{2} \d{3}-\d{4}|"  # Example: +998 93 123-4567
+            r"\+998\d{9}"  # Example: +998881234567
             r")"  # Closing non-capturing group
         )
         for _ in range(num_samples):

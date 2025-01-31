@@ -182,7 +182,7 @@ class Faker:
         ...
 
     def random_choices(
-        self, elements: Union[Collection[str], Collection[T], OrderedDict[T, float]] = ..., length: Optional[int] = ...
+        self, elements: Union[Collection[T], OrderedDict[T, float]] = ..., length: Optional[int] = ...
     ) -> Sequence[T]:
         """
         Generate a list of objects randomly sampled from ``elements`` with replacement.
@@ -244,7 +244,7 @@ class Faker:
         """
         ...
 
-    def random_element(self, elements: Union[Collection[str], Collection[T], OrderedDict[T, float]] = ...) -> T:
+    def random_element(self, elements: Union[Collection[T], OrderedDict[T, float]] = ...) -> T:
         """
         Generate a randomly sampled object from ``elements``.
 
@@ -265,7 +265,7 @@ class Faker:
 
     def random_elements(
         self,
-        elements: Union[Collection[str], Collection[T], OrderedDict[T, float]] = ...,
+        elements: Union[Collection[T], OrderedDict[T, float]] = ...,
         length: Optional[int] = ...,
         unique: bool = ...,
         use_weighting: Optional[bool] = ...,
@@ -381,7 +381,7 @@ class Faker:
         ...
 
     def random_sample(
-        self, elements: Union[Collection[str], Collection[T], OrderedDict[T, float]] = ..., length: Optional[int] = ...
+        self, elements: Union[Collection[T], OrderedDict[T, float]] = ..., length: Optional[int] = ...
     ) -> Sequence[T]:
         """
         Generate a list of objects randomly sampled from ``elements`` without replacement.
@@ -945,10 +945,15 @@ class Faker:
         ...
 
     def pricetag(self) -> str: ...
-    def am_pm(self) -> str: ...
+    def am_pm(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
     def century(self) -> str:
         """
-        :example: 'XVII'
+        :sample:
         """
         ...
 
@@ -961,8 +966,11 @@ class Faker:
         Get a date string between January 1, 1970 and now.
 
         :param pattern: Format of the date (year-month-day by default)
-        :example: '2008-11-27'
-        :return: Date
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
+        :sample: pattern='%m/%d/%Y'
+        :sample: end_datetime='+1w'
         """
         ...
 
@@ -970,17 +978,17 @@ class Faker:
         self,
         start_date: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int] = ...,
         end_date: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int] = ...,
-        pattern: Optional[str] = ...,
-    ) -> Union[datetime.date, str]:
+    ) -> datetime.date:
         """
         Get a Date object based on a random date between two given dates.
         Accepts date strings that can be recognized by strtotime().
 
-        :param start_date: Defaults to 30 years ago
-        :param end_date: Defaults to "today"
-        :param pattern: optional pattern to format the date as string
-        :example: Date('1999-02-02') or '1999-02-02'
-        :return: Date or string
+        :param start_date: A ``DateParseType``. Defaults to 30 years ago
+        :param end_date: A ``DateParseType``. Defaults to ``"today"``
+
+        :sample:
+        :sample: start_date='-1w'
+        :sample: start_date="-1y", end_date="+1w"
         """
         ...
 
@@ -988,16 +996,14 @@ class Faker:
         self,
         date_start: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...,
         date_end: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...,
-        pattern: Optional[str] = ...,
-    ) -> Union[datetime.date, str]:
+    ) -> datetime.date:
         """
-        Takes two Date objects and returns a random date between the two given dates.
-        Accepts Date or datetime objects
+        Get a random date between the two given dates.
 
-        :param date_start: Date
-        :param date_end: Date
-        :param pattern: optional pattern to format the date as string
-        :return: Date or string
+        :param date_start: A ``DateParseType``. Defaults to the UNIX epoch
+        :param date_end: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
         """
         ...
 
@@ -1005,85 +1011,75 @@ class Faker:
         """
         Get a date object between January 1, 1970 and now
 
-        :example: datetime.date(2016, 9, 20)
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
+        :sample: end_datetime='+1w'
         """
         ...
 
     def date_of_birth(
-        self,
-        tzinfo: Optional[datetime.tzinfo] = ...,
-        minimum_age: int = ...,
-        maximum_age: int = ...,
-        pattern: Optional[str] = ...,
-    ) -> Union[datetime.date, str]:
+        self, tzinfo: Optional[datetime.tzinfo] = ..., minimum_age: int = ..., maximum_age: int = ...
+    ) -> datetime.date:
         """
         Generate a random date of birth represented as a Date object,
         constrained by optional miminimum_age and maximum_age
         parameters.
 
         :param tzinfo: Defaults to None.
-        :param minimum_age: Defaults to 0.
-        :param maximum_age: Defaults to 115.
-        :param pattern: optional pattern to format the date as string
+        :param minimum_age: Defaults to ``0``.
+        :param maximum_age: Defaults to ``115``.
 
-        :example: Date('1979-02-02')
-        :return: Date
+        :sample:
+        :sample: minimum_age=30, maximum_age=50
         """
         ...
 
-    def date_this_century(
-        self, before_today: bool = ..., after_today: bool = ..., pattern: Optional[str] = ...
-    ) -> Union[datetime.date, str]:
+    def date_this_century(self, before_today: bool = ..., after_today: bool = ...) -> datetime.date:
         """
         Gets a Date object for the current century.
 
-        :param before_today: include days in current century before today
-        :param after_today: include days in current century after today
-        :param pattern: optional pattern to format the date as string
-        :example: Date('2012-04-04')
-        :return: Date or string
+        :param before_today: include days in current century before today. Defaults to True
+        :param after_today: include days in current century after today. Defaults to False
+
+        :sample:
+        :sample: before_today=False, after_today=True
         """
         ...
 
-    def date_this_decade(
-        self, before_today: bool = ..., after_today: bool = ..., pattern: Optional[str] = ...
-    ) -> Union[datetime.date, str]:
+    def date_this_decade(self, before_today: bool = ..., after_today: bool = ...) -> datetime.date:
         """
         Gets a Date object for the decade year.
 
-        :param before_today: include days in current decade before today
-        :param after_today: include days in current decade after today
-        :param pattern: optional pattern to format the date as string
-        :example: Date('2012-04-04')
-        :return: Date or string
+        :param before_today: include days in current decade before today. Defaults to True
+        :param after_today: include days in current decade after today. Defaults to False
+
+        :sample:
+        :sample: before_today=False, after_today=True
         """
         ...
 
-    def date_this_month(
-        self, before_today: bool = ..., after_today: bool = ..., pattern: Optional[str] = ...
-    ) -> Union[datetime.date, str]:
+    def date_this_month(self, before_today: bool = ..., after_today: bool = ...) -> datetime.date:
         """
         Gets a Date object for the current month.
 
-        :param before_today: include days in current month before today
-        :param after_today: include days in current month after today
-        :param pattern: optional pattern to format the date as string
-        :example: dtdate('2012-04-04')
-        :return: dtdate or string
+        :param before_today: include days in current month before today. Defaults to True
+        :param after_today: include days in current month after today. Defaults to False
+
+        :sample:
+        :sample: before_today=False, after_today=True
         """
         ...
 
-    def date_this_year(
-        self, before_today: bool = ..., after_today: bool = ..., pattern: Optional[str] = ...
-    ) -> Union[datetime.date, str]:
+    def date_this_year(self, before_today: bool = ..., after_today: bool = ...) -> datetime.date:
         """
         Gets a Date object for the current year.
 
-        :param before_today: include days in current year before today
-        :param after_today: include days in current year after today
-        :param pattern: optional pattern to format the date as string
-        :example: Date('2012-04-04')
-        :return: Date
+        :param before_today: include days in current year before today. Defaults to True
+        :param after_today: include days in current year after today. Defaults to False
+
+        :sample:
+        :sample: before_today=False, after_today=True
         """
         ...
 
@@ -1093,11 +1089,12 @@ class Faker:
         end_datetime: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...,
     ) -> datetime.datetime:
         """
-        Get a datetime object for a date between January 1, 1970 and now
+        Get a datetime object for a date between January 1, 1970 and a specified end_datetime
 
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('2005-08-16 20:39:21')
-        :return: datetime
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
         """
         ...
 
@@ -1108,11 +1105,14 @@ class Faker:
         start_datetime: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...,
     ) -> datetime.datetime:
         """
-        Get a datetime object for a date between January 1, 001 and now
+        Get a datetime object for a date between January 1, 0001 and now
 
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('1265-03-22 21:15:52')
-        :return: datetime
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+        :param start_datetime: A ``DateParseType``. Defaults to UNIX timestamp ``-62135596800``,
+        equivalent to 0001-01-01 00:00:00 UTC
+
+        :sample:
         """
         ...
 
@@ -1126,11 +1126,11 @@ class Faker:
         Get a datetime object based on a random date between two given dates.
         Accepts date strings that can be recognized by strtotime().
 
-        :param start_date: Defaults to 30 years ago
-        :param end_date: Defaults to "now"
+        :param start_date: A ``DateParseType``. Defaults to 30 years ago
+        :param end_date: A ``DateParseType``. Defaults to ``"now"``
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('1999-02-02 11:42:52')
-        :return: datetime
+
+        :sample:
         """
         ...
 
@@ -1141,15 +1141,15 @@ class Faker:
         tzinfo: Optional[datetime.tzinfo] = ...,
     ) -> datetime.datetime:
         """
-        Takes two datetime objects and returns a random datetime between the two
-        given datetimes.
-        Accepts datetime objects.
+        Get a random datetime between the two given datetimes.
 
-        :param datetime_start: datetime
-        :param datetime_end: datetime
+        :param datetime_start: A ``DateParseType``. Defaults to the UNIX epoch
+        :param datetime_end: A ``DateParseType``. Defaults to the current date and time
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('1999-02-02 11:42:52')
-        :return: datetime
+
+        :sample:
+        :sample: datetime_start='-30y', datetime_end='now'
+        :sample: datetime_start='now', datetime_end='+1y'
         """
         ...
 
@@ -1159,11 +1159,12 @@ class Faker:
         """
         Gets a datetime object for the current century.
 
-        :param before_now: include days in current century before today
-        :param after_now: include days in current century after today
+        :param before_now: include days in current century before today. Defaults to True
+        :param after_now: include days in current century after today. Defaults to False
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('2012-04-04 11:02:02')
-        :return: datetime
+
+        :sample:
+        :sample: before_now=False, after_now=True
         """
         ...
 
@@ -1173,11 +1174,12 @@ class Faker:
         """
         Gets a datetime object for the decade year.
 
-        :param before_now: include days in current decade before today
-        :param after_now: include days in current decade after today
+        :param before_now: include days in current decade before today. Defaults to True
+        :param after_now: include days in current decade after today. Defaults to False
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('2012-04-04 11:02:02')
-        :return: datetime
+
+        :sample:
+        :sample: before_now=False, after_now=True
         """
         ...
 
@@ -1187,11 +1189,12 @@ class Faker:
         """
         Gets a datetime object for the current month.
 
-        :param before_now: include days in current month before today
-        :param after_now: include days in current month after today
+        :param before_now: include days in current month before today. Defaults to True
+        :param after_now: include days in current month after today. Defaults to False
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('2012-04-04 11:02:02')
-        :return: datetime
+
+        :sample:
+        :sample: before_now=False, after_now=True
         """
         ...
 
@@ -1201,32 +1204,39 @@ class Faker:
         """
         Gets a datetime object for the current year.
 
-        :param before_now: include days in current year before today
-        :param after_now: include days in current year after today
+        :param before_now: include days in current year before today. Defaults to True
+        :param after_now: include days in current year after today. Defaults to False
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('2012-04-04 11:02:02')
-        :return: datetime
+
+        :sample:
+        :sample: before_now=False, after_now=True
         """
         ...
 
-    def day_of_month(self) -> str: ...
-    def day_of_week(self) -> str: ...
+    def day_of_month(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
+    def day_of_week(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
     def future_date(
-        self,
-        end_date: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int] = ...,
-        tzinfo: Optional[datetime.tzinfo] = ...,
-        pattern: Optional[str] = ...,
-    ) -> Union[datetime.date, str]:
+        self, end_date: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int] = ...
+    ) -> datetime.date:
         """
         Get a Date object based on a random date between 1 day from now and a
         given date.
-        Accepts date strings that can be recognized by strtotime().
 
-        :param end_date: Defaults to "+30d"
+        :param end_date: A ``DateParseType``. Defaults to ``"+30d"``
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :param pattern: optional pattern to format the date as string
-        :example: dtdate('2030-01-01')
-        :return: dtdate
+
+        :sample:
+        :sample: end_date='+1y'
         """
         ...
 
@@ -1238,12 +1248,12 @@ class Faker:
         """
         Get a datetime object based on a random date between 1 second form now
         and a given date.
-        Accepts date strings that can be recognized by strtotime().
 
-        :param end_date: Defaults to "+30d"
+        :param end_date: A ``DateParseType``. Defaults to ``"+30d"``
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :example: datetime('1999-02-02 11:42:52')
-        :return: datetime
+
+        :sample:
+        :sample: end_date='+1y'
         """
         ...
 
@@ -1255,33 +1265,43 @@ class Faker:
         timespec: str = ...,
     ) -> str:
         """
-        Get a timestamp in ISO 8601 format (or one of its profiles).
+        Get an ISO 8601 string for a datetime between the UNIX epoch and now.
 
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
         :param sep: separator between date and time, defaults to 'T'
         :param timespec: format specifier for the time part, defaults to 'auto' - see datetime.isoformat() documentation
-        :example: '2003-10-21T16:05:52+0000'
+
+        :sample:
         """
         ...
 
-    def month(self) -> str: ...
-    def month_name(self) -> str: ...
+    def month(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
+    def month_name(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
     def past_date(
         self,
         start_date: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int] = ...,
         tzinfo: Optional[datetime.tzinfo] = ...,
-        pattern: Optional[str] = ...,
-    ) -> Union[datetime.date, str]:
+    ) -> datetime.date:
         """
         Get a Date object based on a random date between a given date and 1 day
         ago.
-        Accepts date strings that can be recognized by strtotime().
 
-        :param start_date: Defaults to "-30d"
+        :param start_date: A ``DateParseType``. Defaults to ``"-30d"``
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
-        :param pattern: optional pattern to format the date as string
-        :example: dtdate('1999-02-02')
-        :return: dtdate or string
+
+        :sample:
+        :sample: start_date='-1y'
         """
         ...
 
@@ -1293,23 +1313,23 @@ class Faker:
         """
         Get a datetime object based on a random date between a given date and 1
         second ago.
-        Accepts date strings that can be recognized by strtotime().
 
-        :param start_date: Defaults to "-30d"
+        :param start_date: A ``DateParseType``. Defaults to ``"-30d"``
         :param tzinfo: timezone, instance of datetime.tzinfo subclass
         :example: datetime('1999-02-02 11:42:52')
-        :return: datetime
+
+        :sample:
+        :sample: end_date='+1y'
         """
         ...
 
     def pytimezone(self, *args: Any, **kwargs: Any) -> Optional[datetime.tzinfo]:
         """
-        Generate a random timezone (see `faker.timezone` for any args)
-        and return as a python object usable as a `tzinfo` to `datetime`
+        Generate a random timezone (see ``faker.timezone`` for any args)
+        and return a Python object usable as a ``tzinfo`` for ``datetime``
         or other fakers.
 
-        :example: faker.pytimezone()
-        :return: dateutil.tz.tz.tzfile
+        :sample:
         """
         ...
 
@@ -1322,7 +1342,10 @@ class Faker:
         Get a time string (24h format by default)
 
         :param pattern: format
-        :example: '15:02:34'
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
+        :sample: pattern='%I:%M %p'
         """
         ...
 
@@ -1330,7 +1353,12 @@ class Faker:
         self, end_datetime: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...
     ) -> datetime.timedelta:
         """
-        Get a timedelta object
+        Get a random timedelta object of duration between the current date and time and `end_datetime`
+
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
+        :sample: end_datetime='+30h'
         """
         ...
 
@@ -1340,7 +1368,10 @@ class Faker:
         """
         Get a time object
 
-        :example: datetime.time(15, 56, 56, 772876)
+        :param end_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
+        :sample: end_datetime='+1h'
         """
         ...
 
@@ -1357,11 +1388,25 @@ class Faker:
 
         The data points will start at ``start_date``, and be at every time interval specified by
         ``precision``.
-        ``distrib`` is a callable that accepts ``<datetime>`` and returns ``<value>``
+
+        :param start_date: A ``DateParseType``. Defaults to ``"-30d"``
+        :param end_date: A ``DateParseType``. Defaults to ``"now"``
+        :param precision: A float representing the time interval between data points.
+        Defaults to 1/30th of the time
+        :param distrib: A callable that accepts a datetime object and returns a value.
+        Defaults to a uniform distribution
+        :param tzinfo: timezone, instance of datetime.tzinfo subclass
+
+        :sample:
         """
         ...
 
-    def timezone(self) -> str: ...
+    def timezone(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
     def unix_time(
         self,
         end_datetime: Union[datetime.date, datetime.datetime, datetime.timedelta, str, int, None] = ...,
@@ -1369,15 +1414,23 @@ class Faker:
     ) -> float:
         """
         Get a timestamp between January 1, 1970 and now, unless passed
-        explicit start_datetime or end_datetime values.
+        explicit ``start_datetime`` or `end_datetime` values.
 
         On Windows, the decimal part is always 0.
 
-        :example: 1061306726.6
+        :param end_datetime: A ``DateParseType``. Defaults to the UNIX epoch
+        :param start_datetime: A ``DateParseType``. Defaults to the current date and time
+
+        :sample:
         """
         ...
 
-    def year(self) -> str: ...
+    def year(self) -> str:
+        """
+        :sample:
+        """
+        ...
+
     def emoji(self) -> str:
         """
         :example: '😉'
@@ -1749,6 +1802,8 @@ class Faker:
     def isbn10(self, separator: str = ...) -> str: ...
     def isbn13(self, separator: str = ...) -> str: ...
     def job(self) -> str: ...
+    def job_female(self) -> str: ...
+    def job_male(self) -> str: ...
     def get_words_list(
         self, part_of_speech: Optional[str] = ..., ext_word_list: Optional[Sequence[str]] = ...
     ) -> List[str]:
@@ -2928,6 +2983,9 @@ class Faker:
 
     def local_latitude(self) -> Decimal: ...
     def local_longitude(self) -> Decimal: ...
+    def academic_prefix(self) -> str: ...
+    def academic_suffix(self) -> str: ...
+    def dialing_code(self) -> str: ...
     def canton(self) -> Tuple[str, str]:
         """
         Randomly returns a swiss canton ('Abbreviated', 'Name').
@@ -2946,6 +3004,30 @@ class Faker:
         """
         Randomly returns a Swiss canton name.
         :example 'Zürich'
+        """
+        ...
+
+    def landline_code(self) -> str: ...
+    def civil_status(self) -> Tuple[str, str]: ...
+    def civil_status_code(self) -> str: ...
+    def civil_status_name(self) -> str: ...
+    def kvnr(self) -> str:
+        """
+        German health insurance number ("Krankenversichertennummer", abbr. "KVNR")
+
+        Source: https://de.wikipedia.org/wiki/Krankenversichertennummer
+
+        :return: a random health insurance number
+        """
+        ...
+
+    def rvnr(self, birthdate: Optional[datetime.date] = ...) -> str:
+        """
+        Pension insurance number (German: "Rentenversicherungsnummer", abbr. "RVNR")
+
+        Source: https://de.wikipedia.org/wiki/Versicherungsnummer
+
+        :return: A valid German pension insurance number
         """
         ...
 
@@ -3313,7 +3395,6 @@ class Faker:
         ...
 
     def cellphone_block(self) -> str: ...
-    def landline_code(self) -> str: ...
     def special_code(self) -> str: ...
     def company_rut(self) -> str:
         """
@@ -3555,6 +3636,24 @@ class Faker:
 
     def area_code_with_separator(self) -> str: ...
     def area_code_without_separator(self) -> str: ...
+    def day_of_week_in_guj(self) -> str:
+        """
+        Returns day of the week in `Gujarati`
+        """
+        ...
+
+    def month_in_guj(self) -> str:
+        """
+        Returns month name in `Gujarati`
+        """
+        ...
+
+    def month_name_in_guj(self) -> str:
+        """
+        Returns month name in `Gujarati`
+        """
+        ...
+
     def street_title(self) -> str: ...
     def city_part(self) -> str: ...
     def frequent_street_name(self) -> str: ...
@@ -3753,6 +3852,22 @@ class Faker:
     def building_dong(self) -> str:
         """
         :example: 가
+        """
+        ...
+
+    def building_number_segregated(self) -> str:
+        """
+        :returns: A random building number distinguished with sub-building-number(가지 번호)
+
+        :example: 143-1
+        """
+        ...
+
+    def building_number_underground(self) -> str:
+        """
+        :returns: A random building number with undergrond entrances
+
+        :example: 지하11
         """
         ...
 
