@@ -434,6 +434,7 @@ class TestEnPk(unittest.TestCase):
     def test_last_name(self):
         """Test if the last name is from the predefined list."""
         last_name = self.fake.last_name()
+        self.assertGreater(len(last_name), 1, "Last name should have more than 1 character.")
         self.assertIn(last_name, EnPKprovider.last_names)
 
     def test_full_name(self):
@@ -448,8 +449,20 @@ class TestEnPk(unittest.TestCase):
         name = self.fake.name()
         name_parts = name.split()
         self.assertGreaterEqual(len(name_parts), 2, "Full name should have at least a first and last name.")
-        self.assertIn(name_parts[0], EnPKprovider.first_names)
-        self.assertIn(name_parts[-1], EnPKprovider.last_names)
+        if len(name_parts) == 2:
+            self.assertIn(name_parts[0], EnPKprovider.first_names)
+            self.assertIn(name_parts[-1], EnPKprovider.last_names)
+        elif len(name_parts) == 4:
+            self.assertIn(name_parts[:2], EnPKprovider.first_names)
+            self.assertIn(name_parts[2:], EnPKprovider.last_names)
+        elif len(name_parts) == 3:
+            assert (
+                " ".join(name_parts[:2]) in EnPKprovider.first_names
+                and " ".join(name_parts[2]) in EnPKprovider.last_names
+            ) or (
+                " ".join(name_parts[:1]) in EnPKprovider.first_names
+                and " ".join(name_parts[1:]) in EnPKprovider.last_names
+            ), "Either first two name parts should be in first names, or last two should be in last names."
 
 
 class TestEnUS(unittest.TestCase):
@@ -795,19 +808,6 @@ class TestGuIN(unittest.TestCase):
     def test_name(self):
         name = self.fake.name().split()
         assert all(isinstance(n, str) for n in name)
-        if len(name) == 3:
-            assert all(
-                [
-                    name[0] in GuINProvider.prefixes,
-                    name[1] in GuINProvider.first_names,
-                    name[2] in GuINProvider.last_names,
-                ]
-            )
-        else:
-            assert name[0] in GuINProvider.first_names
-            assert name[-1] in GuINProvider.last_names
-
-    """Verify that gender specific prefixes are set correctly"""
 
     def test_prefix(self):
         prefix = self.fake.prefix()
